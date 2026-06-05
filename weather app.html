@@ -1,0 +1,1067 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>weather app</title>
+</head>
+<style>
+    *{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body{
+    /* position: relative; */
+    width: 100%;
+    height: fit-content;
+}
+body::-webkit-scrollbar{
+    display: none;
+} 
+.veiwactive{
+    display: flex;
+}
+.veiw{
+    display: none;
+}
+#veiw{
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(150deg,#0f0c29,#1a1a2e,#302b63);
+    background-position: center;
+    /* background-image: url("snow.jpeg"); */
+    background-position: center;
+    background-size: cover;
+    padding: 20px 0 0 0;
+    /* background-repeat: no-repeat; */
+}
+#veiw::before{
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    background: rgba(0, 0, 0, 0.5);
+}
+#mainview{
+    width: 600px;
+    height: 100%;
+    margin: 0 auto;
+    padding: 20px;
+}
+#backbtn{
+    width: 80px;
+    height: 30px;
+    cursor: pointer;
+    border-radius: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1.5px solid rgba(255,255,255,0.28);
+    background: rgba(255,255,255,0.13);
+    font-size: 13px;
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    color: #fff;
+    transition: 0.3s ease;
+}
+#backbtn:hover{
+    transform: translateX(5px)
+}
+#today4cast{
+    width: 100%;
+    height: 520px;
+    margin: 15px 0;
+    border: 1.5px solid rgba(255,255,255,0.28);
+    background: rgba(255,255,255,0.13);
+    font-size: 13px;
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    color: rgba(255,255,255,0.60);
+    border-radius: 30px;
+    padding: 30px;
+    position: relative;
+    z-index: 1;
+}
+.d{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0rem 0 0.1rem 0;
+}
+#location{
+    font-size: 1.7rem;
+    color: #fff;
+}
+#degree{
+    width: 50px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    cursor: pointer;
+    border: 1.5px solid rgba(255,255,255,0.28);
+    background: rgba(255,255,255,0.13);
+    font-size: 16px;
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    color: #fff;
+    border-radius: 30px;
+    transition: 0.5s ease-in-out;
+}
+#degree:hover, #degree:active{
+    background: rgba(255,255,255,0.20); 
+    transform: scale(1.05);
+}
+#currenttime{
+      font-size: 12.5px; 
+      color: rgba(255,255,255,0.80);
+      font-weight: 300; 
+      margin-bottom: 22px; 
+      letter-spacing: 0.2px;
+}
+.e{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 2.2rem;
+    font-weight: 900;
+    font-family: sans-serif;
+    color: #fff;
+    margin: 0rem 0 0;
+    gap: 20px;
+}
+#maindeg{
+    font-size: 85px;
+    font-weight: 900;
+    position: relative;
+}
+#maindegicon{
+    width: 100px;
+    height: 100px;
+    object-fit: contain;
+}
+#descip{
+    font-size: 22px; 
+    font-weight: 300;
+    font-style: italic;
+    font-family: 'Cormorant Garamond', serif;
+    color: rgba(255,255,255,0.80); 
+    margin-bottom: 4px;
+}
+#feeling{
+    font-size: 0.9rem;
+    letter-spacing: 0.5px;
+    font-weight: 600;
+}
+.timediv{
+    display: flex; 
+    justify-content: space-around;
+    background: rgba(255,255,255,0.10); 
+    border-radius: 18px;
+    padding: 14px 16px; 
+    margin-bottom: 12px;
+    margin: 1rem 0;
+    border: 1px solid rgba(255,255,255,0.10);
+}
+.icondiv{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    line-height: 1.3;
+}
+.stateicon{
+    font-size: 1.2rem;
+    color: #fff;
+}
+.state{
+    font-size: 14px;
+    font-weight: 100;
+    letter-spacing: 2px;
+}
+.statetime{
+    font-size: 1.3rem;
+    color: #fff;
+    font-weight: 900;
+}
+.f{
+   display: flex; 
+   gap: 8px; 
+   justify-content: space-between;
+}
+#temdeg{
+    font-size: 3.5rem;
+    background: transparent;
+    color: #fff;
+    border: none;
+    background-color: none;
+    position: absolute;
+    margin: 10px -25px;
+    /* top: 0; */
+}
+.temc{
+    font-size: 34px; 
+    font-weight: 300;
+    letter-spacing: 0; 
+    vertical-align: super; 
+    margin-left: -4px;
+}
+.smallglassdiv{
+    background: rgba(255,255,255,0.10); border-radius: 18px;
+    padding: 14px 16px; margin-bottom: 12px;
+    border: 1px solid rgba(255,255,255,0.10);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    width: 30%;
+    height: 100px;
+    gap: 6px;
+    transition: 0.5s ease-in-out;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    place-content: center;
+    place-items: center;
+    text-align: center;
+}
+.smallglassdiv:hover{
+    background: rgba(255,255,255,0.20);
+    border-color: rgba(255,255,255,0.28);
+    transform: translateY(-3px);
+}
+.smallglassdivicon{
+    font-size: 1.5rem;
+    color: white;
+}
+.smallglassdivvalue{
+    font-size: 1rem;
+    color: white;
+    font-weight: 800;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+.smallglassdivdetail{
+    font-size: 0.8rem;
+    letter-spacing: 1.5px;
+}
+#forcastdiv{
+    border: 1.5px solid rgba(255,255,255,0.28);
+    background: rgba(255,255,255,0.10);
+    font-size: 13px;
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    color: rgba(255,255,255,0.60);
+    border-radius: 30px;
+    width: 100%;
+    height: fit-content;
+    padding: 20px;
+}
+.g{
+    display: grid; 
+    gap: 8px; 
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    grid-row-gap: 10px;
+    grid-column-gap: 10px;
+    grid-template-columns: repeat(5, 1fr);
+    height: 100%;
+}
+#todayforcast{
+    background: rgba(255,255,255,0.22); 
+    border-color: rgba(255,255,255,0.35);
+    color: white;
+    transition: 0.4s ease;
+}
+#todayforcast:hover, #todayforcast:active, #todayforcast:focus{
+    transform: translateY(-7px);
+}
+.forcastday{
+    font-size: 10px; 
+    color: rgba(255,255,255,0.60); 
+    text-transform: uppercase; 
+    letter-spacing: 0.8px; 
+    font-weight: 600;
+}
+.forcasticon{
+     width: 50px;
+     height: 50px;
+     object-fit: contain;
+}
+.forcastdeg{
+    font-size: 16px; 
+    font-weight: 700;
+}
+.forcastday{
+   font-size: 12px; 
+   color: rgba(255,255,255,0.40); 
+};
+.forcastlabel{
+    color: red;
+    background-color: red;
+    font-size: 5rem;
+}
+.forcast2nddeg{
+    font-size: 14px;
+}
+.mainforcat{
+    flex: 1; 
+    display: flex; 
+    flex-direction: column;
+    align-items: center;
+    text-align: center; 
+    gap: 5px;
+    background: rgba(255,255,255,0.10); 
+    border-radius: 18px;
+    padding: 14px 6px;
+    border: 1px solid transparent;
+    transition: all 0.2s; 
+    cursor: default;
+    height: fit-content;
+    color: white;
+}
+.mainforcat:hover, .mainforcat:active, .mainforcat:focus{
+    background: rgba(255,255,255,0.20);
+    border-color: rgba(255,255,255,0.28);
+    transform: translateY(-3px);
+}
+#searchsection{
+    overflow: hidden;
+    width: 100%;
+    height: 100vh;
+    /* display: none; */
+    /* display: grid; */
+    grid-template-columns: repeat(3, 1fr);
+    align-items: center;
+    place-content: center;
+    place-items: center;
+    justify-content: top;
+    flex-direction: column;
+    background: linear-gradient(230deg, #203a43, #0f2027, #0f2027);
+    gap: 5px;
+    /* padding: 50px 0; */
+}
+#searchsection h1{
+    font-size: 4rem;
+    animation: float 4s infinite ease-in-out;
+}
+@keyframes float{
+    0%{
+        transform: translateY(-20px);
+    }
+    50%{
+        transform: translateY(0);
+    }
+    100%{
+        transform: translateY(-20px);
+    }
+}
+#searchsection h2{
+    background: linear-gradient(135deg, #fff 40%, rgba(255,255,255,0.55));
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    font-size: 48px;
+    font-weight: 800;
+    letter-spacing: -2px;
+    transform: translateY(-10px);
+    animation: h1ani 1s forwards ease;
+}
+@keyframes h1ani{
+    from{
+        transform: translateY(-10px);
+        opacity: 0;
+    }
+    to{
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+#searchsection p{
+    color: rgba(255,255,255,0.55);
+    font-size: 15px;
+    font-weight: 300;
+    letter-spacing: 0.5;
+    gap: 10px;
+    animation: h1ani 1s forwards ease;
+}
+.a{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin: 1rem 0 0 0;
+    animation: aani 1.5s forwards ease;
+}
+@keyframes aani{
+    from{
+        transform: translateY(-40px);
+        opacity: 0;
+    }
+    to{
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+.a input{
+    width: 300px;
+    height: 45px;
+    flex: 1;
+    padding: 16px 24px;
+    border-radius: 50px;
+    border: 1px solid rgba(255,255,255,0.28);
+    outline: 1px solid rgba(255,255,255,0.28);
+    background: transparent;
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    color: #fff;
+    font-family: 'Outfit', sans-serif;
+    font-size: 15px; 
+    font-weight: 400;
+}
+#searchBtn{
+    width: 220px;
+    border: none;
+    border-radius: 30px;
+    font-size: 14px;
+    font-weight: 600;
+    margin: 1rem 0;
+    cursor: pointer;
+    height: 40px;
+    transition: 0.2s ease-in-out;
+}
+#searchBtn:active{
+    width: 200px;
+    height: 35px;
+}
+.locationbtn{
+    width: 220px;
+    height: 40px;
+    border-radius: 50px;
+    border: 1.5px solid rgba(255,255,255,0.28);
+    background: rgba(255,255,255,0.13);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    color: #fff;
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.8rem;
+    cursor: pointer; 
+    font-weight: 400;
+    margin: 0.5rem 0;
+    transition: 0.5s ease;
+    animation: aani 1.5s forwards ease;
+}
+.locationbtn:active{
+    width: 200px;
+    height: 35px;
+}
+.recent{
+    background: linear-gradient(135deg, #fff 40%, rgba(255,255,255,0.55));
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    font-size: 1rem;  
+    animation: aani 1.5s forwards ease;
+}
+.b{
+    display: grid;
+    gap: 15px;
+    /* margin: 0 4rem 0 0; */
+}
+.c{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    animation: aani 2s forwards ease;
+}
+.c span{
+    width: 80px;
+    height: 30px;
+    cursor: pointer;
+    border-radius: 50px;
+    border: 1.5px solid rgba(255,255,255,0.28);
+    background: rgba(255,255,255,0.13);
+    font-size: 13px;
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    color: rgba(255,255,255,0.60);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.animatebackbtn{
+    animation: animatebackbtn 1s ease forwards;
+}
+@keyframes animatebackbt{
+      from { 
+        opacity: 0; 
+        transform: translateY(15px); 
+    }
+      to   { 
+        opacity: 1; 
+        transform: translateY(0); 
+    }
+}
+.animatemaindiv{
+    animation: animatemaindiv 1s ease forwards;
+}
+@keyframes animatemaindiv{
+      from { 
+        opacity: 0; 
+        transform: translateY(30px); 
+    }
+      to { 
+        opacity: 1; 
+        transform: translateY(0); 
+    }
+}
+.loadingdiv{
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    z-index: 9999;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    border: 1.5px solid rgba(255,255,255,0.28);
+    background: rgba(255,255,255,0.13);
+    font-size: 13px;
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 20px;
+}
+.spinner {
+      width: 36px; height: 36px;
+      border: 2.5px solid rgba(255,255,255,0.2);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 0.85s linear infinite;
+}
+.loadtext{
+    color: white;
+    font-size: 1rem;
+}
+@keyframes spin {
+     to {
+         transform: rotate(360deg); 
+        }
+}
+#arlertpop{
+    position: absolute;
+    background: #ccefce;
+    width: 250px;
+    padding: 20px;
+    text-wrap: nowrap;
+    /* bottom: 150px; */
+    height: 30px;
+    /* border: 1px solid red; */
+    box-shadow: 2px 2px 5px black;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    border-radius: 30px;
+    font-size: 16px;
+    font-weight: 500;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    text-transform: lowercase;
+    /* text-decoration: double; */
+    text-shadow: 1px 1px 10px black;
+    margin: 0 auto;
+    left: 50%;
+    z-index: 999999999;
+    transform: translateX(-49%);
+}
+.showarleart{
+    animation: animatearleart 0.9s ease forwards;
+}
+@keyframes animatearleart{
+    0%{
+        bottom: 0;
+        /* display: none; */
+    }
+    100%{
+        bottom: 120px;
+        /* display: flex; */
+    }
+}
+@media (max-width: 650px){
+    #mainview{
+        width: 500px;
+    }
+}
+@media (max-width: 600px){
+    #mainview{
+        width: 400px;
+        
+    }
+    .g{
+         grid-template-columns: repeat(3, 1fr);
+    }
+}
+/* @media (max-width: 500px){
+    #view{
+        padding: 90px;
+    }
+} */
+@media (max-width: 450px){
+    #mainview{
+        width: 380px;
+    }
+}
+@media (max-width: 400px){
+    /* #view{
+        padding: 15px;
+    } */
+    #mainview{
+        width: 350px;
+        padding: 15px;
+    }
+    #today4cast{
+        padding: 30px 30px;
+        height: 480px;
+    }
+    #maindeg{
+    font-size: 70px;
+}
+.e{
+    margin: 0;
+}
+#currenttime{
+    margin: 0.3rem 0;
+}
+#maindegicon{
+    font-size: 70px;
+}
+.timediv{
+    margin-bottom: 12px;
+    margin: 0.2rem 0 1rem;
+}
+.a input{
+    width: 250px;
+    height: 30px;
+    padding: 13px;
+}
+}
+</style>
+<body>
+    <div id="veiw">
+    <section id="mainview">
+    <div onclick="backbtnfunction()" id="backbtn">← Back</div>
+    <div id="today4cast">
+        <div class="d">
+            <h3 id="location">...</h3>
+            <h3 id="degree" onclick="corf()">°F</h3>
+        </div>
+        <h5 id="currenttime">...</h5>
+         <div class="e">
+            <h1 id="maindeg">.°<span class="temc">C</span></h1>
+            <img id="maindegicon" src="" alt="weather icon">
+        </div>
+        <h4 id="descip">get</h4>
+        <p id="feeling">Feels like ...<span>°</span></p>
+        <div class="timediv">
+            <div class="icondiv">
+                <h5 class="stateicon"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="stateicon"><path d="M12 2v8M4.93 10.93l1.41 1.41M2 18h2M20 18h2M17.66 10.93l-1.41 1.41"/><path d="M20 18a8 8 0 1 0-16 0"/><line x1="3" y1="22" x2="21" y2="22"/><polyline points="8 18 12 14 16 18"/></svg></h5>
+                <h5 class="state">Sunrise</h5>
+                <h4 id="statetime" class="statetime">...</h4>
+            </div>
+            <div class="icondiv">
+                <h5 class="stateicon"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="stateicon"><path d="M12 2v8M4.93 10.93l1.41 1.41M2 18h2M20 18h2M17.66 10.93l-1.41 1.41"/><path d="M20 18a8 8 0 1 0-16 0"/><line x1="3" y1="22" x2="21" y2="22"/><polyline points="8 14 12 18 16 14"/></svg></h5>
+                <h5 class="state">Sunset</h5>
+                <h4 id="Sunset" class="statetime">...</h4>
+            </div>
+        </div>
+        <div class="f">
+        <div class="smallglassdiv">
+                <h5 class="smallglassdivicon"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="smallglassdivicon"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg></h5>
+                <h5 id="humidity" class="smallglassdivvalue">...</h5>
+                <h4 class="smallglassdivdetail">Humidity</h4>
+        </div>
+                <div class="smallglassdiv">
+                <h5 class="smallglassdivicon"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="smallglassdivicon"><path d="M17.7 7.7a2.5 2.5 0 1 1 1.8 4.3H2"/><path d="M9.6 4.6A2 2 0 1 1 11 8H2"/><path d="M12.6 19.4A2 2 0 1 0 14 16H2"/></svg></h5>
+                <h5 id="wind" class="smallglassdivvalue">...</h5>
+                <h4 class="smallglassdivdetail">Wind</h4>
+        </div>
+                <div class="smallglassdiv">
+                <h5 class="smallglassdivicon"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="smallglassdivicon"><path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0z"/></svg></h5>
+                <h5 id="pressure" class="smallglassdivvalue">...</h5>
+                <h4 class="smallglassdivdetail">Pressure</h4>
+        </div>
+        </div>
+        </div>
+        <div id="forcastdiv">
+            <h3 style="margin: 0rem 0 1rem 0; letter-spacing: 2px; font-weight: 700;" id="forcastlabel" class="forcastlabel">6 — Day Forecast</h3>
+            <div class="g">
+            <div id="todayforcast" class="mainforcat">
+                <h5 id="todayday" class="forcastday">Today</h5>
+                <img class="forcasticon" id="todayimg" src="" alt="">
+                <h4 id="todaytemp" class="forcastdeg">32°</h4>
+                <h6 id="todaydes" class="forcast2nddeg">26°</h6>
+            </div>
+            <div class="mainforcat">
+                <h5 id="day2day" class="forcastday"></h5>
+                <img class="forcasticon" id="day2img" src="" alt="">
+                <h4 id="day2temp" class="forcastdeg">30°</h4>
+                <h6 id="day2des" class="forcast2nddeg">24°</h6>
+            </div>
+            <div class="mainforcat">
+                <h5 id="day3day" class="forcastday">Wed</h5>
+                <img class="forcasticon" id="day3img" src="" alt="">
+                <h4 id="day3temp" class="forcastdeg">27°</h4>
+                <h6 id="day3des" class="forcast2nddeg">22°</h6>
+            </div>
+            <div class="mainforcat">
+                <h5 id="day4day" class="forcastday">Thu</h5>
+                <img class="forcasticon" id="day4img" src="" alt="">
+                <h4 id="day4temp" class="forcastdeg">25°</h4>
+                <h6 id="day4des" class="forcast2nddeg">21°</h6>
+            </div>
+            <div class="mainforcat">
+                <h5 id="day5day" class="forcastday"></h5>
+                <img class="forcasticon" id="day5img" src="" alt="">
+                <h4 id="day5temp" class="forcastdeg"></h4>
+                <h6 id="day5des" class="forcast2nddeg"></h6>
+            </div>
+                <!-- <div class="mainforcat">
+                <h5 id="day6day" class="forcastday"></h5>
+                <img class="forcasticon" id="day6img" src="" alt="">
+                <h4 id="day6temp" class="forcastdeg"></h4>
+                <h6 id="day6des" class="forcast2nddeg"></h6>
+            </div> -->
+            </div>
+        </div>
+    </section>
+    </div>
+
+    <section id="searchsection">
+        <h1>🌤️</h1>
+        <h2>Skye</h2>
+        <p>Your personal weather companion</p>
+        <div class="a">
+        <input type="text" name="" id="searchinput"  placeholder="Search any city…">
+        <button onclick="searchfunction()" id="searchBtn">Search</button>
+        </div>
+        <button id="locationbtn" class="locationbtn">Use my current location</button>
+        <div class="b">
+        <h4 class="recent">Suggestions</h4>
+        <div id="c" class="c">
+        <span id="ilorin">Ilorin</span>
+        <span id="lagos">Lagos</span>
+        <span id="london">London</span>
+        </div>
+        </div>
+    </section>
+
+
+
+    <div id="loadingdiv" class="loadingdiv">
+        <div class="spinner"></div>
+        <div class="loadtext">loading...</div>
+    </div>
+
+    <div id="arlertpop">Please enter a vaild City name</div>
+</body>
+<script>
+    let unit = "metric";
+let lastsearchcity = "";
+let view = document.getElementById("veiw");
+let backbtn = document.getElementById("backbtn");
+let fdegree = document.getElementById('degree');
+const apikey = '45db8cbf55a91ec2bfe093dafc11c3ee';
+let fmainview = document.getElementById("mainveiw");
+let farlertpop = document.getElementById("arlertpop");
+let forcastdiv = document.getElementById("forcastdiv");
+let loadingdiv = document.getElementById("loadingdiv");
+let fmaindegicon = document.getElementById("maindegicon");
+let flocationbtn = document.getElementById("locationbtn");
+const baseurl = 'https://api.openweathermap.org/data/2.5';
+let today4castdiv = document.getElementById("today4cast");
+let fsearchinput = document.getElementById("searchinput");
+let searchsection = document.getElementById("searchsection");
+const days = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"]
+const shortday = ["Sun","Mon","Tue","Wed","Thur","Fri","Sat"]
+
+fdegree.textContent = "°C";
+async function corf(){
+    if (!lastsearchcity){
+        return 
+    }
+    unit === "metric" ? unit = "imperial" : unit = "metric";
+    fdegree.textContent === "°C" ? fdegree.textContent = "°F" : fdegree.textContent = "°C";
+    lastsearchcity = fsearchinput.value 
+    try {
+             loadingdiv.style.display = "flex";
+        await Promise.all([getforcatdata(), getweatherdatat()]) 
+    }catch(error){
+        console.log("⚠️", error)
+    }
+    finally{
+         loadingdiv.style.display = "none";
+    }
+
+}
+async function getweatherdatat(){
+    const url = `${baseurl}/weather?q=${fsearchinput.value}&appid=${apikey}&units=${unit}`;
+    const resopne = await fetch(url);
+    const data =  await resopne.json();
+        if(data.cod === "404"){
+        farlertpop.textContent = data.message;
+        showarleat();
+        return
+    }
+    redering(data)
+    handlebackground(data)
+    console.log(data)
+}
+function redering(data){
+    let utc = data.dt + data.timezone;
+    let date = new Date(utc * 1000)
+    let dateday = days[date.getUTCDay()];
+    let hour = date.getUTCHours();
+    const ampm = hour >= 12 ? "PM" : "AM";
+    hour = hour % 12 === 0 ? 12 : hour % 12;
+
+
+    let sunrisetime = new Date(data.sys.sunrise * 1000);
+    let sunrisehour = sunrisetime.getUTCHours();
+    const sunriseampm = sunrisehour >= 12 ? "PM" : "AM";
+    sunrisehour = sunrisehour % 12 === 0 ? 12 : sunrisehour % 12;
+
+
+
+    let sunsettime = new Date(data.sys.sunset * 1000);
+    let sunsethour = sunsettime.getUTCHours();
+    const sunsetampm = sunsethour >= 12 ? "PM" : "AM";
+    sunsethour = sunsethour % 12 === 0 ? 12 : sunsethour % 12;
+
+    const iconcode = data.weather[0].icon;
+
+    fmaindegicon.src = `https://openweathermap.org/img/wn/${iconcode}@2x.png`
+
+
+        document.getElementById("location").textContent = `${data.name}, ${data.sys.country}`;
+        document.getElementById("currenttime").textContent =  `${dateday} · ${hour}:${date.getUTCMinutes().toString().padStart(2, "0")} ${ampm}`
+        document.getElementById("maindeg").innerHTML = `${data.main.temp.toFixed(0)}°<span class="temc">${unit === "metric" ? "C" : "F"}</span>`
+        document.getElementById("descip").textContent = `${data.weather[0].description}`
+        document.getElementById("feeling").textContent = `Feels like ${data.main.feels_like.toFixed(0)}°`
+        document.getElementById("statetime").textContent = `${sunrisehour}:${sunrisetime.getUTCMinutes().toString().padStart(2, "0")} ${sunriseampm}`
+        document.getElementById("Sunset").textContent = `${sunsethour}:${sunsettime.getUTCMinutes().toString().padStart(2, "0")} ${sunsetampm}`
+        document.getElementById("humidity").textContent = `${data.main.humidity}%`
+        document.getElementById("wind").textContent = `${data.wind.speed} km/h`
+        document.getElementById("pressure").textContent = `${data.main.pressure} hPa`
+        document.getElementById("todaytemp").textContent = `${data.main.temp.toFixed(0)}°`
+        document.getElementById("todaydes").textContent = `${data.weather[0].description}`
+};
+async function getforcatdata(){
+    const url = `${baseurl}/forecast?q=${fsearchinput.value}&appid=${apikey}&units=${unit}`;
+    const respones = await fetch(url);
+    const forcastdata = await respones.json();
+    renderforecast(forcastdata);
+}
+function renderforecast(forcastdata){
+    console.log(forcastdata)
+
+    const iconcodeday1 = forcastdata.list[0].weather[0].icon;
+    todayimg.src = `https://openweathermap.org/img/wn/${iconcodeday1}@2x.png`;
+            // document.getElementById("todaydes").textContent = `${forcastdata.list[0].weather[0].description}`
+
+
+            // let date2 = new Date(forcastdata.list[8].dt * 1000)
+            let dateday2 = shortday[new Date(forcastdata.list[8].dt_txt).getUTCDay()];
+
+    const iconcodeday2 = forcastdata.list[8].weather[0].icon;
+    day2img.src = `https://openweathermap.org/img/wn/${iconcodeday2}@2x.png`;
+ 
+            document.getElementById("day2day").textContent = dateday2;
+            document.getElementById("day2temp").textContent = `${forcastdata.list[8].main.temp.toFixed(0)}°`
+            document.getElementById("day2des").textContent = `${forcastdata.list[8].weather[0].description}`
+
+            const iconcodeday3 = forcastdata.list[16].weather[0].icon;
+    day3img.src = `https://openweathermap.org/img/wn/${iconcodeday3}@2x.png`;
+            // let date3 = new Date(forcastdata.list[16].dt * 1000)
+            let dateday3 = shortday[new Date(forcastdata.list[16].dt_txt).getUTCDay()];
+            document.getElementById("day3day").textContent = dateday3;
+            document.getElementById("day3temp").textContent = `${forcastdata.list[16].main.temp.toFixed(0)}°`
+            document.getElementById("day3des").textContent = `${forcastdata.list[16].weather[0].description}`
+ 
+            const iconcodeday4 = forcastdata.list[24].weather[0].icon;
+    day4img.src = `https://openweathermap.org/img/wn/${iconcodeday4}@2x.png`;
+            // let date4 = new Date(forcastdata.list[24].dt * 1000)
+            let dateday4 = shortday[new Date(forcastdata.list[24].dt_txt).getUTCDay()];
+            document.getElementById("day4day").textContent = dateday4;
+            document.getElementById("day4temp").textContent = `${forcastdata.list[24].main.temp.toFixed(0)}°`
+            document.getElementById("day4des").textContent = `${forcastdata.list[24].weather[0].description}`
+ 
+            const iconcodeday5 = forcastdata.list[32].weather[0].icon;
+    day5img.src = `https://openweathermap.org/img/wn/${iconcodeday5}@2x.png`;
+            // let date5 = new Date(forcastdata.list[32].dt * 1000)
+            let dateday5 = shortday[new Date(forcastdata.list[32].dt_txt).getUTCDay()];
+            document.getElementById("day5day").textContent = dateday5;
+            document.getElementById("day5temp").textContent = `${forcastdata.list[32].main.temp.toFixed(0)}°`
+            document.getElementById("day5des").textContent = `${forcastdata.list[32].weather[0].description}`
+ 
+}
+searchsection.classList.add("veiwactive");
+view.classList.add("veiw")
+
+function displayforcast(){
+    searchsection.classList.remove("veiwactive");
+    searchsection.classList.add("veiw")
+    view.classList.remove("veiw")
+    view.classList.add("veiwveiwactive");
+    backbtn.classList.add("animatebackbtn");
+    today4castdiv.classList.add("animatemaindiv");
+    forcastdiv.classList.add("animatemaindiv")
+}
+function exitdisplayfunction(){
+    searchsection.classList.add("veiwactive");
+    searchsection.classList.remove("veiw")
+    view.classList.add("veiw")
+    view.classList.remove("veiwveiwactive");
+    backbtn.classList.remove("animatebackbtn");
+    today4castdiv.classList.remove("animatemaindiv");
+    forcastdiv.classList.remove("animatemaindiv")
+}
+
+function showarleat(){
+    farlertpop.classList.add("showarleart");
+    farlertpop.style.display = "flex"
+    setTimeout(function(){
+        farlertpop.classList.remove("showarleart");
+        farlertpop.style.display = "none";
+    },1700)
+}
+
+async function searchfunction(){
+      if(fsearchinput.value === ""){
+        farlertpop.textContent = "Please enter a vaild City name";
+          showarleat()
+          return
+      }
+       loadingdiv.style.display = "flex";
+       lastsearchcity = fsearchinput.value;
+       try{
+          await Promise.all([getforcatdata(), getweatherdatat()]);
+          displayforcast()
+       } 
+       catch(error){
+          console.log("⚠️", error)
+       }
+       finally{
+       loadingdiv.style.display = "none";
+       }
+}
+function backbtnfunction(){
+    fsearchinput.value = "";
+    exitdisplayfunction()
+}
+
+
+let a = 23.43;
+console.log(a.toString().padStart(2, "0"));
+
+document.getElementById("ilorin").addEventListener("click", function(){
+    fsearchinput.value = this.textContent;
+    searchfunction()
+});
+document.getElementById("lagos").addEventListener("click", function(){
+    fsearchinput.value = this.textContent;
+    searchfunction()
+});
+document.getElementById("london").addEventListener("click", function(){
+    fsearchinput.value = this.textContent;
+    searchfunction()
+});
+
+
+function handlebackground(data){
+    let status = data.weather[0].id;
+    console.log(status)     
+    if (status >= 200 && status <= 232){
+        view.style.backgroundImage = 'url("stormy.jpeg")'
+    } 
+    else if (status >= 300 && status <= 531){
+        view.style.backgroundImage = 'url("rainy.jpeg")'
+    }
+    else if(status >= 600 && status <= 622){
+        view.style.backgroundImage = 'url("snow.jpeg")'
+    }
+     else if(status >= 701 && status <= 781){
+        view.style.backgroundImage = 'url("fogy.jpeg")'
+     }
+    else if(status <= 800){
+        view.style.backgroundImage = 'url("sunny.jpeg")'
+    }
+    else if (status >= 801 && status <= 804){
+        view.style.backgroundImage = 'url("cloud.jpeg")'
+    }
+        else{
+            view.style.background = "linear-gradient(150deg,#0f0c29,#1a1a2e,#302b63)";
+        }
+    }
+flocationbtn.addEventListener("click", function(){
+    locationfunction()
+});
+function locationfunction(){
+        navigator.geolocation.getCurrentPosition(
+       async function(position){
+            const lat = position.coords.latitude;
+            const lon = position.coords.longitude;
+            console.log(lat, lon)
+            try{
+            await Promise.all([getlonandlan(lat, lon), getlonandlanforcatdata(lat, lon)]);
+            displayforcast()
+            }
+            catch(error){
+                console.log("⚠️", error)
+            }
+            
+        },
+        function(error){
+            console.log("⚠️", error)
+        }
+    )
+}
+
+async function getlonandlan(lat, lon){
+    try{
+        loadingdiv.style.display = "flex";
+    const url = `${baseurl}/weather?lat=${lat}&lon=${lon}&appid=${apikey}&units=${unit}`;
+    const resopne = await fetch(url);
+    const data =  await resopne.json();
+    redering(data)
+    handlebackground(data);
+    lastsearchcity = data.name;
+    fsearchinput.value = data.name
+    loadingdiv.style.display = "none";
+    // displayforcast();
+    console.log(data)
+    }
+    catch(error){
+        console.log("⚠️", error)
+    }
+    }
+async function getlonandlanforcatdata(lat, lon) {
+    try{
+        loadingdiv.style.display = "flex";
+    const url = `${baseurl}/forecast?lat=${lat}&lon=${lon}&appid=${apikey}&units=${unit}`;
+    const respones = await fetch(url);
+    const forcastdata = await respones.json();
+    renderforecast(forcastdata);
+    loadingdiv.style.display = "none"
+    }
+    catch(error){
+        console.log("⚠️", error)
+    }   
+}
+</script>
+</html>
